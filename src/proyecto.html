@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CYBER LAB | Laboratorio de Ciberseguridad</title>
+
+    <!--
+        LIBRERÍA PARA GENERAR EL QR
+
+        Esta librería solamente se utiliza para dibujar
+        el código QR en la página.
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+
+        /* ==============================
+           CONFIGURACIÓN GENERAL
+        ============================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #123b56,
+                    #07111f 45%,
+                    #03070d
+                );
+
+            color: #eaf4ff;
+
+            min-height: 100vh;
+        }
+
+
+        /* ==============================
+           ENCABEZADO
+        ============================== */
+
+        header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 20px 6%;
+
+            background: rgba(3, 12, 22, 0.95);
+
+            border-bottom: 1px solid #1d415b;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+        }
+
+
+        .logo {
+
+            color: #22d3ee;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+        }
+
+
+        .status-header {
+
+            color: #31e981;
+
+            border: 1px solid #1c6849;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+        }
+
+
+        /* ==============================
+           CONTENEDOR
+        ============================== */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1200px;
+
+            margin: auto;
+        }
+
+
+        /* ==============================
+           PORTADA
+        ============================== */
+
+        .hero {
+
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                0.8fr;
+
+            gap: 30px;
+
+            padding: 70px 0 40px;
+
+            align-items: center;
+        }
+
+
+        .hero-small {
+
+            color: #7fa4bd;
+
+            font-size: 13px;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .hero h1 {
+
+            font-size: clamp(
+                40px,
+                7vw,
+                75px
+            );
+
+            line-height: 0.95;
+
+            margin-bottom: 25px;
+        }
+
+
+        .hero h1 span {
+
+            color: #22d3ee;
+        }
+
+
+        .hero p {
+
+            color: #9db4c8;
+
+            font-size: 18px;
+
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ==============================
+           BOTONES
+        ============================== */
+
+        button {
+
+            border: none;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        button:hover {
+
+            transform: translateY(-2px);
+
+            opacity: 0.9;
+        }
+
+
+        .btn-primary {
+
+            background: #22d3ee;
+
+            color: #031018;
+        }
+
+
+        .btn-secondary {
+
+            background: #132d43;
+
+            color: white;
+
+            border: 1px solid #28516c;
+        }
+
+
+        /* ==============================
+           TARJETAS
+        ============================== */
+
+        .card {
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #0d2135,
+                    #081522
+                );
+
+            border: 1px solid #1c3b53;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,.35);
+        }
+
+
+        /* ==============================
+           QR
+        ============================== */
+
+        .qr-card {
+
+            text-align: center;
+        }
+
+
+        .qr-title {
+
+            color: #22d3ee;
+
+            font-size: 20px;
+
+            margin-bottom: 10px;
+        }
+
+
+        #qrcode {
+
+            background: white;
+
+            padding: 12px;
+
+            width: 220px;
+
+            height: 220px;
+
+            margin: 20px auto;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 10px;
+        }
+
+
+        #qrcode img {
+
+            max-width: 100%;
+
+            max-height: 100%;
+        }
+
+
+        .url-box {
+
+            word-break: break-all;
+
+            color: #8ca8bc;
+
+            font-size: 12px;
+
+            margin-top: 10px;
+        }
+
+
+        /* ==============================
+           LABORATORIO
+        ============================== */
+
+        .lab-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.3fr
+                0.7fr;
+
+            gap: 25px;
+
+            margin: 20px 0 50px;
+        }
+
+
+        .system-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: #31e981;
+
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+
+        .green-dot {
+
+            width: 10px;
+
+            height: 10px;
+
+            background: #31e981;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 15px #31e981;
+        }
+
+
+        /* ==============================
+           ESTADÍSTICAS
+        ============================== */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .stat {
+
+            background: #06111d;
+
+            border: 1px solid #18364c;
+
+            border-radius: 10px;
+
+            padding: 15px;
+        }
+
+
+        .stat-label {
+
+            color: #7895aa;
+
+            font-size: 12px;
+        }
+
+
+        .stat-value {
+
+            display: block;
+
+            color: #22d3ee;
+
+            font-size: 27px;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+        }
+
+
+        /* ==============================
+           PARTICIPANTE
+        ============================== */
+
+        label {
+
+            display: block;
+
+            color: #91aabe;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 13px;
+
+            background: #06111d;
+
+            color: white;
+
+            border: 1px solid #29475e;
+
+            border-radius: 8px;
+
+            margin-bottom: 15px;
+
+            outline: none;
+        }
+
+
+        input:focus {
+
+            border-color: #22d3ee;
+        }
+
+
+        /* ==============================
+           CONTROLES
+        ============================== */
+
+        .controls {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* ==============================
+           BARRA
+        ============================== */
+
+        .progress-label {
+
+            color: #7895aa;
+
+            font-size: 12px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .progress {
+
+            width: 100%;
+
+            height: 13px;
+
+            background: #030a11;
+
+            border: 1px solid #1b3548;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin-bottom: 20px;
+        }
+
+
+        #progressBar {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: #ff5364;
+
+            transition: width .3s;
+        }
+
+
+        /* ==============================
+           TERMINAL
+        ============================== */
+
+        .terminal {
+
+            height: 350px;
+
+            overflow-y: auto;
+
+            background: #02070b;
+
+            border: 1px solid #19364c;
+
+            border-radius: 10px;
+
+            padding: 15px;
+
+            font-family:
+                Consolas,
+                "Courier New",
+                monospace;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+        .terminal-line {
+
+            margin-bottom: 3px;
+        }
+
+
+        .terminal-info {
+
+            color: #22d3ee;
+        }
+
+
+        .terminal-warning {
+
+            color: #ffd45c;
+        }
+
+
+        .terminal-danger {
+
+            color: #ff5364;
+        }
+
+
+        .terminal-success {
+
+            color: #31e981;
+        }
+
+
+        /* ==============================
+           INFORMACIÓN
+        ============================== */
+
+        .info h2 {
+
+            margin-bottom: 15px;
+
+            color: #22d3ee;
+        }
+
+
+        .info h3 {
+
+            margin-top: 25px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .info p,
+        .info li {
+
+            color: #a5b9c9;
+
+            line-height: 1.7;
+        }
+
+
+        .info ul {
+
+            padding-left: 20px;
+        }
+
+
+        .warning-box {
+
+            margin-top: 25px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #2b2010;
+
+            border: 1px solid #6e5121;
+
+            color: #e4c77c;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==============================
+           PIE
+        ============================== */
+
+        footer {
+
+            text-align: center;
+
+            color: #688095;
+
+            padding: 30px;
+
+            border-top: 1px solid #17354b;
+
+            font-size: 13px;
+        }
+
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media(max-width: 850px) {
+
+            header {
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+
+            .hero {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .lab-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            #qrcode {
+
+                width: 200px;
+
+                height: 200px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     ENCABEZADO
+===================================== -->
+
+<header>
+
+    <div class="logo">
+        ◈ CYBER LAB
+    </div>
+
+    <div class="status-header">
+        ● SIMULACIÓN EDUCATIVA
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+<!-- =====================================
+     PORTADA
+===================================== -->
+
+<section class="hero">
+
+
+    <div>
+
+        <div class="hero-small">
+            LABORATORIO DE CIBERSEGURIDAD
+        </div>
+
+
+        <h1>
+            Aprende
+            <span>ciberseguridad</span>
+            simulando.
+        </h1>
+
+
+        <p>
+
+            Explora un laboratorio interactivo
+            para comprender los intentos de acceso,
+            fuerza bruta, bloqueo y medidas de
+            protección.
+
+        </p>
+
+
+        <button
+            class="btn-primary"
+            onclick="irAlLaboratorio()">
+
+            ENTRAR AL LABORATORIO
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================
+         QR
+    ================================== -->
+
+    <div class="card qr-card">
+
+        <div class="qr-title">
+
+            📱 UNIRSE AL LABORATORIO
+
+        </div>
+
+
+        <p class="hero-small">
+
+            Escanea este código con tu celular
+
+        </p>
+
+
+        <div id="qrcode"></div>
+
+
+        <div class="url-box">
+
+            Dirección del laboratorio:
+
+            <br>
+
+            <strong id="paginaURL"></strong>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================
+     LABORATORIO
+===================================== -->
+
+<section
+    id="laboratorio"
+    class="lab-grid">
+
+
+    <!-- =================================
+         PANEL PRINCIPAL
+    ================================== -->
+
+    <div class="card">
+
+
+        <div class="system-status">
+
+            <span class="green-dot"></span>
+
+            SISTEMA ACTIVO
+
+        </div>
+
+
+
+        <!-- ESTADÍSTICAS -->
+
+        <div class="stats">
+
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    INTENTOS
+                </span>
+
+                <span
+                    id="attempts"
+                    class="stat-value">
+
+                    0
+
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    BLOQUEOS
+                </span>
+
+                <span
+                    id="blocks"
+                    class="stat-value">
+
+                    0
+
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    ESTADO
+                </span>
+
+                <span
+                    id="state"
+                    class="stat-value">
+
+                    SEGURO
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PARTICIPANTE -->
+
+        <label for="student">
+
+            Nombre del participante
+
+        </label>
+
+
+        <input
+            type="text"
+            id="student"
+            placeholder="Ejemplo: María">
+
+
+
+        <!-- BOTONES -->
+
+        <div class="controls">
+
+
+            <button
+                class="btn-primary"
+                onclick="simularFuerzaBruta()">
+
+                ▶ SIMULAR FUERZA BRUTA
+
+            </button>
+
+
+            <button
+                class="btn-secondary"
+                onclick="activarProteccion()">
+
+                🛡 ACTIVAR PROTECCIÓN
+
+            </button>
+
+
+            <button
+                class="btn-secondary"
+                onclick="reiniciar()">
+
+                ↻ REINICIAR
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- PROGRESO -->
+
+        <div class="progress-label">
+
+            NIVEL DE ACTIVIDAD
+
+        </div>
+
+
+        <div class="progress">
+
+            <div id="progressBar"></div>
+
+        </div>
+
+
+
+        <!-- TERMINAL -->
+
+        <div
+            id="terminal"
+            class="terminal">
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         INFORMACIÓN
+    ================================== -->
+
+    <aside class="card info">
+
+
+        <h2>
+            🎯 Objetivo de aprendizaje
+        </h2>
+
+
+        <p>
+
+            Identificar cómo un sistema puede
+            detectar intentos repetidos de acceso
+            y aplicar medidas de protección.
+
+        </p>
+
+
+
+        <h3>
+            ¿Qué observar?
+        </h3>
+
+
+        <ul>
+
+            <li>
+                Incremento de intentos.
+            </li>
+
+            <li>
+                Detección de actividad sospechosa.
+            </li>
+
+            <li>
+                Bloqueo del sistema.
+            </li>
+
+            <li>
+                Respuesta defensiva.
+            </li>
+
+        </ul>
+
+
+
+        <h3>
+            Conexión con Arduino
+        </h3>
+
+
+        <p>
+
+            El Arduino o ESP32 puede mostrar
+            eventos equivalentes en el Monitor
+            Serial.
+
+        </p>
+
+
+
+        <div class="warning-box">
+
+            ⚠️ Esta actividad es una simulación
+            educativa. No realiza ataques reales
+            ni intenta acceder a dispositivos,
+            redes o cuentas externas.
+
+        </div>
+
+
+    </aside>
+
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================
+     PIE
+===================================== -->
+
+<footer>
+
+    CYBER LAB · Laboratorio educativo de
+    Informática y Ciberseguridad
+
+</footer>
+
+
+
+<script>
+
+/* ==========================================
+   VARIABLES DEL LABORATORIO
+========================================== */
+
+
+let intentos = 0;
+
+let bloqueos = 0;
+
+let ejecutando = false;
+
+let intervalo = null;
+
+
+
+/* ==========================================
+   ELEMENTOS HTML
+========================================== */
+
+
+const terminal =
+    document.getElementById("terminal");
+
+
+const attempts =
+    document.getElementById("attempts");
+
+
+const blocks =
+    document.getElementById("blocks");
+
+
+const state =
+    document.getElementById("state");
+
+
+const progressBar =
+    document.getElementById("progressBar");
+
+
+
+/* ==========================================
+   MENSAJES DE TERMINAL
+========================================== */
+
+
+function escribirMensaje(
+    mensaje,
+    tipo = "info"
+) {
+
+    const linea =
+        document.createElement("div");
+
+
+    linea.className =
+        "terminal-line terminal-" + tipo;
+
+
+    linea.textContent =
+        "> " + mensaje;
+
+
+    terminal.appendChild(linea);
+
+
+    terminal.scrollTop =
+        terminal.scrollHeight;
+}
+
+
+
+/* ==========================================
+   SIMULACIÓN DE FUERZA BRUTA
+========================================== */
+
+
+function simularFuerzaBruta() {
+
+
+    if (ejecutando) {
+
+        escribirMensaje(
+            "La simulación ya está ejecutándose.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    ejecutando = true;
+
+
+    let contador = 0;
+
+
+    const nombre =
+        document.getElementById(
+            "student"
+        ).value.trim();
+
+
+    if (nombre === "") {
+
+        escribirMensaje(
+            "Participante: Invitado",
+            "info"
+        );
+
+    } else {
+
+        escribirMensaje(
+            "Participante: " + nombre,
+            "info"
+        );
+
+    }
+
+
+    escribirMensaje(
+        "Iniciando simulación...",
+        "warning"
+    );
+
+
+    escribirMensaje(
+        "Analizando intentos de acceso...",
+        "info"
+    );
+
+
+
+    intervalo = setInterval(
+
+        function() {
+
+
+            contador++;
+
+            intentos++;
+
+
+            attempts.textContent =
+                intentos;
+
+
+            progressBar.style.width =
+                (contador * 12.5) + "%";
+
+
+
+            escribirMensaje(
+
+                "Intento simulado #" +
+                contador +
+                " → credencial no válida",
+
+                contador >= 7
+                    ? "danger"
+                    : "warning"
+
+            );
+
+
+
+            /* =========================
+               BLOQUEO
+            ========================= */
+
+            if (contador >= 8) {
+
+
+                clearInterval(
+                    intervalo
+                );
+
+
+                intervalo = null;
+
+
+                ejecutando = false;
+
+
+                bloqueos++;
+
+
+                blocks.textContent =
+                    bloqueos;
+
+
+                state.textContent =
+                    "BLOQUEADO";
+
+
+                state.style.color =
+                    "#ff5364";
+
+
+                progressBar.style.width =
+                    "100%";
+
+
+
+                escribirMensaje(
+                    "⚠ ACTIVIDAD SOSPECHOSA DETECTADA",
+                    "danger"
+                );
+
+
+                escribirMensaje(
+                    "Límite de intentos alcanzado.",
+                    "danger"
+                );
+
+
+                escribirMensaje(
+                    "🛡 SISTEMA BLOQUEADO PREVENTIVAMENTE",
+                    "danger"
+                );
+
+
+            }
+
+
+        },
+
+        500
+
+    );
+
+}
+
+
+
+/* ==========================================
+   PROTECCIÓN
+========================================== */
+
+
+function activarProteccion() {
+
+
+    escribirMensaje(
+        "Activando medidas de protección...",
+        "info"
+    );
+
+
+    setTimeout(
+
+        function() {
+
+            escribirMensaje(
+                "Firewall: ACTIVO",
+                "success"
+            );
+
+
+            escribirMensaje(
+                "Límite de intentos: ACTIVO",
+                "success"
+            );
+
+
+            escribirMensaje(
+                "Bloqueo preventivo: ACTIVO",
+                "success"
+            );
+
+
+            escribirMensaje(
+                "Protección del sistema: ACTIVA",
+                "success"
+            );
+
+
+            state.textContent =
+                "PROTEGIDO";
+
+
+            state.style.color =
+                "#31e981";
+
+
+            progressBar.style.width =
+                "100%";
+
+        },
+
+        500
+
+    );
+
+}
+
+
+
+/* ==========================================
+   REINICIAR
+========================================== */
+
+
+function reiniciar() {
+
+
+    if (intervalo !== null) {
+
+        clearInterval(
+            intervalo
+        );
+
+    }
+
+
+    intervalo = null;
+
+
+    ejecutando = false;
+
+
+    intentos = 0;
+
+    bloqueos = 0;
+
+
+    attempts.textContent =
+        "0";
+
+
+    blocks.textContent =
+        "0";
+
+
+    state.textContent =
+        "SEGURO";
+
+
+    state.style.color =
+        "#22d3ee";
+
+
+    progressBar.style.width =
+        "0%";
+
+
+    terminal.innerHTML =
+        "";
+
+
+    escribirMensaje(
+        "CYBER LAB iniciado.",
+        "info"
+    );
+
+
+    escribirMensaje(
+        "Sistema preparado para la simulación.",
+        "success"
+    );
+
+
+}
+
+
+
+/* ==========================================
+   IR AL LABORATORIO
+========================================== */
+
+
+function irAlLaboratorio() {
+
+    document
+        .getElementById("laboratorio")
+        .scrollIntoView({
+
+            behavior: "smooth"
+
+        });
+
+}
+
+
+
+/* ==========================================
+   CÓDIGO QR
+========================================== */
+
+
+/*
+    IMPORTANTE:
+
+    Cuando publiques tu página en Internet,
+    cambia esta dirección por la dirección
+    REAL de tu laboratorio.
+
+    EJEMPLO:
+
+    https://nimia.github.io/cyber-lab/
+*/
+
+
+const URL_LABORATORIO =
+    "https://TU-USUARIO.github.io/cyber-lab/";
+
+
+
+/*
+    Si la página ya está publicada,
+    usamos la dirección actual.
+
+    Si estás trabajando localmente,
+    utilizamos la dirección definida arriba.
+*/
+
+
+let direccionQR;
+
+
+if (
+    window.location.protocol === "http:" ||
+    window.location.protocol === "https:"
+) {
+
+    direccionQR =
+        window.location.href;
+
+} else {
+
+    direccionQR =
+        URL_LABORATORIO;
+
+}
+
+
+
+/* Mostrar dirección */
+
+document.getElementById(
+    "paginaURL"
+).textContent =
+    direccionQR;
+
+
+
+/* Crear QR */
+
+new QRCode(
+
+    document.getElementById(
+        "qrcode"
+    ),
+
+    {
+
+        text: direccionQR,
+
+        width: 190,
+
+        height: 190,
+
+        colorDark: "#000000",
+
+        colorLight: "#ffffff",
+
+        correctLevel:
+            QRCode.CorrectLevel.H
+
+    }
+
+);
+
+
+
+/* ==========================================
+   INICIO
+========================================== */
+
+
+reiniciar();
+
+</script>
+
+
+</body>
+</html>
